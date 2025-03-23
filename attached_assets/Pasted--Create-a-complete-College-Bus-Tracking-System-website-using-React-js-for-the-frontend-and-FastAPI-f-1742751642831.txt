@@ -1,0 +1,166 @@
+"Create a complete College Bus Tracking System website using React.js for the frontend and FastAPI for the backend. The website should have a clean, responsive, and user-friendly UI with proper authentication and real-time bus tracking. The features should be as follows:
+📌 1️⃣ Authentication System (Login & Registration)
+
+    A Login Page with options to sign in as Student or Admin.
+
+    A Student Registration Page where students enter:
+
+        URN (Unique Roll Number), Name, Email, Mobile Number, Address, Year, Department, Profile Picture, and Bus Route Selection.
+
+    JWT-based authentication to ensure secure login.
+
+📌 2️⃣ Student Dashboard
+
+✅ Profile Section:
+
+    Show all student details after login.
+
+    Display Digital Bus Pass with a QR Code for verification.
+
+    Show Active Subscription Status with the next payment due date.
+
+✅ Live Bus Tracking:
+
+    Display Live Bus Location on a simple Leaflet.js map.
+
+    Show Estimated Time of Arrival (ETA) for the selected bus stop.
+
+    Show all stops and routes in a clean UI.
+
+✅ Payments & Fees Management:
+
+    Online Fee Payment System (Razorpay/Stripe) for bus subscriptions.
+
+    Show remaining balance & due date if partial payment is made.
+
+    Maintain payment history of the student.
+
+✅ Bus Schedule & Alerts:
+
+    Display Bus Schedule with expected arrival times.
+
+    Show Calendar for Holidays when the bus won’t operate.
+
+    Notifications for delays or schedule changes.
+
+📌 3️⃣ Admin Dashboard
+
+✅ Main Dashboard:
+
+    Show Real-Time Bus Tracking for all buses on a map.
+
+    Display Total Students, Total Buses, and Total Pending Fees.
+
+    Alerts for any unpaid student fees.
+
+✅ Bus Management:
+
+    Add, Edit, or Remove Buses.
+
+    Assign bus routes to buses.
+
+    Track all bus live locations in real-time.
+
+✅ Driver Management:
+
+    Add, Edit, or Remove Drivers.
+
+    Assign drivers to buses and view their contact details.
+
+✅ Student Management:
+
+    View all registered students, filter by Year, Department, or Route.
+
+    Check how much money is pending for each student.
+
+    Show left days before the next payment is due.
+
+    Add a Student or Remove a Student from the System.
+
+    Search and filter students easily.
+
+✅ Route Management:
+
+    Create, Edit, or Delete bus routes.
+
+    Assign stops to different routes.
+
+    Show all bus stops in an organized table.
+
+✅ Payments & Reports:
+
+    Show Total Fees Collected and Pending Fees.
+
+    Generate Reports for Payments & Buses.
+
+📌 4️⃣ Tech Stack & Tools
+
+✅ Frontend (React.js + Vite)
+
+    React.js (for fast UI development)
+
+    Tailwind CSS (for simple, modern styling)
+
+    React Router (for navigation)
+
+    Leaflet.js (for maps & bus tracking)
+
+    Axios (for API calls)
+
+✅ Backend (FastAPI + MongoDB)
+
+    FastAPI (for backend API)
+
+    MongoDB (for database)
+
+    WebSockets (for live bus tracking)
+
+    JWT Authentication (for login security)
+
+✅ Payment Integration:
+
+    Razorpay or Stripe for online bus fee payments
+
+✅ Deployment:
+
+    Replit for development
+
+    Later deployment on Vercel (Frontend) & Railway (Backend)
+
+📌 5️⃣ Additional Features (Optional Enhancements)
+
+✅ QR Code for Digital Bus Pass
+✅ Admin Reports for Fee & Student Data
+✅ Push Notifications for Payment Reminders
+✅ Bus Seat Availability Check
+📌 6️⃣ Development Plan
+
+🔹 Phase 1: Setup Project & UI
+
+    Create React.js frontend with Tailwind UI
+
+    Set up FastAPI backend with MongoDB
+
+🔹 Phase 2: Authentication & Profile
+
+    JWT-based Login/Register APIs
+
+    Build Student & Admin Dashboards
+
+🔹 Phase 3: Live Tracking & Payments
+
+    Integrate Leaflet.js for maps
+
+    Fetch live GPS data from FastAPI
+
+    Add Razorpay/Stripe for payments
+
+🔹 Phase 4: Admin Panel & Final Testing
+
+    Build Admin Dashboard with full controls
+
+    Complete Testing & Deployment
+
+🔹 Final Notes
+
+Make the UI simple, clean, and responsive using Tailwind CSS. Use modular React components for reusability. The backend should be scalable and secure using FastAPI and MongoDB. The project should have smooth navigation, well-structured API endpoints, and real-time tracking using WebSockets."
