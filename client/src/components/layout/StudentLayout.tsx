@@ -15,7 +15,7 @@ import {
   MapPinIcon, 
   CalendarIcon, 
   CreditCardIcon, 
-  RoadIcon, 
+  MapIcon, 
   User2Icon,
   LogOutIcon,
   MenuIcon
@@ -79,7 +79,7 @@ export default function StudentLayout({ children }: StudentLayoutProps) {
     { name: 'Live Tracking', icon: <MapPinIcon className="w-5 h-5 mr-3" />, path: '/student/tracking' },
     { name: 'Bus Schedule', icon: <CalendarIcon className="w-5 h-5 mr-3" />, path: '/student/schedule' },
     { name: 'Payments', icon: <CreditCardIcon className="w-5 h-5 mr-3" />, path: '/student/payments' },
-    { name: 'Routes & Stops', icon: <RoadIcon className="w-5 h-5 mr-3" />, path: '/student/routes' },
+    { name: 'Routes & Stops', icon: <MapIcon className="w-5 h-5 mr-3" />, path: '/student/routes' },
     { name: 'Profile', icon: <User2Icon className="w-5 h-5 mr-3" />, path: '/student/profile' },
   ];
 
