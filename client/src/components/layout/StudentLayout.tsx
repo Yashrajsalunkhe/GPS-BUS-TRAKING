@@ -146,16 +146,16 @@ export default function StudentLayout({ children }: StudentLayoutProps) {
             <nav className="flex-1 px-2 py-4 bg-white space-y-1">
               {navItems.map(item => (
                 <Link key={item.path} href={item.path}>
-                  <a
+                  <div
                     className={`${
                       isActive(item.path)
                         ? 'bg-gray-100 text-primary-dark'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-primary-dark'
-                    } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
+                    } group flex items-center px-2 py-2 text-sm font-medium rounded-md cursor-pointer`}
                   >
                     {item.icon}
                     {item.name}
-                  </a>
+                  </div>
                 </Link>
               ))}
             </nav>
@@ -206,17 +206,17 @@ export default function StudentLayout({ children }: StudentLayoutProps) {
                 <nav className="px-2 py-4 bg-white space-y-1">
                   {navItems.map(item => (
                     <Link key={item.path} href={item.path}>
-                      <a
+                      <div
                         className={`${
                           isActive(item.path)
                             ? 'bg-gray-100 text-primary-dark'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-primary-dark'
-                        } group flex items-center px-2 py-2 text-sm font-medium rounded-md`}
+                        } group flex items-center px-2 py-2 text-sm font-medium rounded-md cursor-pointer`}
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {item.icon}
                         {item.name}
-                      </a>
+                      </div>
                     </Link>
                   ))}
                   
@@ -245,12 +245,12 @@ export default function StudentLayout({ children }: StudentLayoutProps) {
           <div className="flex justify-between items-center">
             {navItems.slice(0, 4).map(item => (
               <Link key={item.path} href={item.path}>
-                <a className={`flex flex-col items-center justify-center w-full p-3 ${
+                <div className={`flex flex-col items-center justify-center w-full p-3 cursor-pointer ${
                   isActive(item.path) ? 'text-primary' : 'text-gray-500'
                 }`}>
                   {item.icon.props.children}
                   <span className="text-xs mt-1">{item.name}</span>
-                </a>
+                </div>
               </Link>
             ))}
           </div>
