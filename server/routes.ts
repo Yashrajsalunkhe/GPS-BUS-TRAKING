@@ -24,6 +24,7 @@ import {
 import bcrypt from "bcrypt";
 import { z, ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
+import Stripe from "stripe";
 
 declare global {
   namespace Express {
