@@ -41,6 +41,15 @@ declare global {
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
   
+  // Initialize Stripe
+  if (!process.env.STRIPE_SECRET_KEY) {
+    console.warn('Missing Stripe secret key. Payment features will not work.');
+  }
+  
+  const stripe = process.env.STRIPE_SECRET_KEY ? 
+    new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: "2023-08-16" }) : 
+    null;
+  
   // Setup WebSocket server
   setupWebSocketServer(httpServer);
   
@@ -1209,5 +1218,140 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
+  //-------------------------------------
+  // Stripe Payment API
+  //-------------------------------------
+  
+  // Create a payment intent for one-time payments
+  app.post("/api/create-payment-intent", authenticateToken, async (req, res) => {
+    try {
+      if (!stripe) {
+        return res.status(500).json({ message: 'Stripe is not configured' });
+      }
+      
+      const { amount } = req.body;
+      
+      if (!amount || amount <= 0) {
+        return res.status(400).json({ message: 'Invalid amount' });
+      }
+      
+      // Get student information
+      const student = await storage.getStudentByUserId(req.user!.id);
+      
+      if (!student) {
+        return res.status(404).json({ message: 'Student profile not found' });
+      }
+      
+      // Create a payment intent with the order amount and currency
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(amount * 100), // Convert to cents
+        currency: "usd",
+        description: `Bus Pass Payment for ${student.name} (${student.urn})`,
+        metadata: {
+          studentId: student.id.toString(),
+          userId: req.user!.id.toString(),
+          studentName: student.name,
+          studentUrn: student.urn
+        }
+      });
+      
+      // Return the client secret
+      res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (error: any) {
+      console.error('Error creating payment intent:', error);
+      res.status(500).json({ message: `Error creating payment intent: ${error.message}` });
+    }
+  });
+  
+  // Webhook endpoint to handle Stripe events (payment confirmations, etc.)
+  app.post("/api/stripe-webhook", async (req, res) => {
+    if (!stripe) {
+      return res.status(500).json({ message: 'Stripe is not configured' });
+    }
+    
+    const sig = req.headers['stripe-signature'] as string;
+    
+    let event;
+    
+    try {
+      // Verify the webhook signature
+      // Note: In a production app, you should store your webhook secret in an environment variable
+      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      
+      if (!webhookSecret) {
+        return res.status(400).json({ message: 'Webhook secret not configured' });
+      }
+      
+      event = stripe.webhooks.constructEvent(
+        req.body.toString(), 
+        sig, 
+        webhookSecret
+      );
+    } catch (err: any) {
+      console.error(`Webhook Error: ${err.message}`);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+    
+    // Handle the event
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        const paymentIntent = event.data.object;
+        // Extract metadata
+        const studentId = parseInt(paymentIntent.metadata.studentId);
+        const userId = parseInt(paymentIntent.metadata.userId);
+        const amount = paymentIntent.amount / 100; // Convert cents to dollars
+        
+        try {
+          // Create subscription (valid for 6 months)
+          const startDate = new Date();
+          const endDate = new Date();
+          endDate.setMonth(endDate.getMonth() + 6);
+          
+          const subscription = await storage.createSubscription({
+            studentId,
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
+            amount,
+            active: true
+          });
+          
+          // Create payment record
+          await storage.createPayment({
+            studentId,
+            subscriptionId: subscription.id,
+            amount,
+            paymentDate: new Date().toISOString(),
+            method: 'credit_card',
+            status: 'completed',
+            transactionId: paymentIntent.id
+          });
+          
+          // Log activity
+          await storage.createActivityLog({
+            userId,
+            action: 'Payment Completed',
+            details: `Payment of $${amount} completed successfully`,
+          });
+          
+          console.log(`Payment for student ${studentId} processed successfully`);
+        } catch (error) {
+          console.error('Error processing payment success:', error);
+        }
+        break;
+        
+      case 'payment_intent.payment_failed':
+        const failedPaymentIntent = event.data.object;
+        console.log(`Payment failed: ${failedPaymentIntent.id}`);
+        // You could update your database to mark the payment as failed
+        break;
+        
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+    
+    // Return a 200 response to acknowledge receipt of the event
+    res.send({ received: true });
+  });
+
   return httpServer;
 }

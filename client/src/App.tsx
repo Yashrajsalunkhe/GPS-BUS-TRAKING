@@ -14,6 +14,7 @@ const StudentSchedule = lazy(() => import("@/pages/student/schedule"));
 const StudentPayments = lazy(() => import("@/pages/student/payments"));
 const StudentRoutes = lazy(() => import("@/pages/student/routes"));
 const StudentProfile = lazy(() => import("@/pages/student/profile"));
+const StudentCheckout = lazy(() => import("@/pages/student/checkout"));
 
 const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
 const AdminBuses = lazy(() => import("@/pages/admin/buses"));
@@ -104,6 +105,9 @@ function App() {
         </Route>
         <Route path="/student/profile">
           <ProtectedRoute component={StudentProfile} requiredRole="student" />
+        </Route>
+        <Route path="/student/checkout">
+          <ProtectedRoute component={StudentCheckout} requiredRole="student" />
         </Route>
 
         {/* Admin routes */}
