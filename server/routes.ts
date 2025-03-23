@@ -22,8 +22,8 @@ import {
   insertHolidaySchema 
 } from "@shared/schema";
 import bcrypt from "bcrypt";
-import { z } from "zod";
-import { ZodError } from "zod-validation-error";
+import { z, ZodError } from "zod";
+import { fromZodError } from "zod-validation-error";
 
 declare global {
   namespace Express {

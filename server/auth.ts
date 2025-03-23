@@ -3,8 +3,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { storage } from './storage';
 import { loginSchema, insertUserSchema, insertStudentSchema } from '@shared/schema';
-import { z } from 'zod';
-import { ZodError } from 'zod-validation-error';
+import { z, ZodError } from 'zod';
+import { fromZodError } from 'zod-validation-error';
 
 // Secret keys for JWT (normally would come from environment variables)
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || 'access_secret_key';
