@@ -66,6 +66,7 @@ export const setupWebSocketServer = (server: Server) => {
   
   // Start periodic broadcasting of bus locations
   setInterval(() => {
+    simulateBusMovements();
     broadcastBusLocations();
   }, 10000); // Every 10 seconds
   
@@ -134,6 +135,38 @@ const sendBusLocations = async (ws: WebSocket) => {
     }));
   } catch (error) {
     console.error('Error sending bus locations:', error);
+  }
+};
+
+// Simulate bus movements with small random changes
+const simulateBusMovements = async () => {
+  try {
+    // Get all buses
+    const buses = await storage.getAllBuses();
+    
+    // Update each bus location with a small movement
+    for (const bus of buses) {
+      // Get current location
+      const currentLocation = await storage.getBusLocation(bus.id);
+      
+      if (currentLocation) {
+        // Generate small random movement (approx. 0.0001-0.0005 degrees, roughly 10-50 meters)
+        const latChange = (Math.random() - 0.5) * 0.0005;
+        const lngChange = (Math.random() - 0.5) * 0.0005;
+        
+        // Update the location
+        await storage.updateBusLocation({
+          busId: bus.id,
+          latitude: currentLocation.latitude + latChange,
+          longitude: currentLocation.longitude + lngChange,
+          speed: Math.floor(Math.random() * 10) + 15 // Random speed between 15-25 km/h
+        });
+      }
+    }
+    
+    console.log('Bus movements simulated');
+  } catch (error) {
+    console.error('Error simulating bus movements:', error);
   }
 };
 

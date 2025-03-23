@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { BusLocationWithInfo } from '@shared/interfaces';
-import busTrackingSocket from '@/lib/websocket';
+import { busTrackingSocket } from '@/lib/websocket';
 import { useQuery } from '@tanstack/react-query';
 import { fetchAllRoutes } from '@/lib/api';
 import { RefreshCw } from 'lucide-react';

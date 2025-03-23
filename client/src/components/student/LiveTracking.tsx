@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Card, CardContent } from '@/components/ui/card';
 import { BusLocationWithInfo } from '@shared/interfaces';
-import busTrackingSocket from '@/lib/websocket';
+import { busTrackingSocket } from '@/lib/websocket';
 import { useQuery } from '@tanstack/react-query';
 import { fetchStudentProfile, fetchRouteWithStops } from '@/lib/api';
 import { Skeleton } from '@/components/ui/skeleton';
