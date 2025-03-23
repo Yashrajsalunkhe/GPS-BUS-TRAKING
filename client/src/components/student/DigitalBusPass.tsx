@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 
 export default function DigitalBusPass() {
   const { data: busPass, isLoading: isLoadingPass } = useQuery({
@@ -97,7 +97,7 @@ export default function DigitalBusPass() {
               <p className="font-semibold">{student?.urn}</p>
             </div>
             <div className="bg-white p-2 rounded-lg">
-              <QRCode 
+              <QRCodeSVG 
                 value={getQRCodeData()} 
                 size={96} 
                 level="H" 
