@@ -36,7 +36,8 @@ export default function LoginForm() {
     setIsLoading(true);
     try {
       const response = await login(data);
-      
+      console.log("Login response:", response); // Add this line to log the response
+
       if (response.user.role === "admin") {
         navigate("/admin/dashboard");
       } else if (response.user.role === "student") {

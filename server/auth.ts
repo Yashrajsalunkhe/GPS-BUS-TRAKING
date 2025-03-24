@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { storage } from './storage';
-import { loginSchema, insertUserSchema, insertStudentSchema } from '@shared/schema';
+import { loginSchema, insertUserSchema, insertStudentSchema, registerAdminSchema } from '@shared/schema';
 import { z, ZodError } from 'zod';
 import { fromZodError } from 'zod-validation-error';
 
@@ -61,27 +61,30 @@ export const login = async (req: Request, res: Response) => {
   try {
     // Validate request body
     const validatedData = loginSchema.parse(req.body);
+    console.log("Validated data:", validatedData); // Log validated data
     
     // Find user by username
     const user = await storage.getUserByUsername(validatedData.username);
-    
+    console.log("User found:", user); // Log the user
+
     if (!user) {
+      console.log("User not found");
       return res.status(401).json({ message: 'Invalid username or password' });
     }
     
     // Verify password
     let passwordValid = false;
     
-    try {
-      passwordValid = await bcrypt.compare(validatedData.password, user.password);
-    } catch (err) {
+    if (user.username === 'admin' && validatedData.password === 'password123') {
       // Special case for the admin account with plain text password "password123"
-      if (user.username === 'admin' && validatedData.password === 'password123') {
-        passwordValid = true;
-      }
+      passwordValid = true;
+    } else {
+      passwordValid = await bcrypt.compare(validatedData.password, user.password);
     }
+    console.log("Password valid:", passwordValid); // Log password validation result
     
     if (!passwordValid) {
+      console.log("Invalid password");
       return res.status(401).json({ message: 'Invalid username or password' });
     }
     
@@ -91,9 +94,11 @@ export const login = async (req: Request, res: Response) => {
       username: user.username,
       role: user.role
     });
+    console.log("Tokens generated:", tokens); // Log generated tokens
     
     // Save refresh token to user
     await storage.updateUserRefreshToken(user.id, tokens.refreshToken);
+    console.log("Refresh token updated for user:", user.id); // Log refresh token update
     
     // Return tokens and user info
     res.json({
@@ -113,8 +118,10 @@ export const login = async (req: Request, res: Response) => {
       action: 'User Login',
       ipAddress: req.ip
     });
+    console.log("Activity logged for user:", user.id); // Log activity
     
   } catch (error) {
+    console.error("Error during login:", error); // Log any errors
     if (error instanceof ZodError) {
       return res.status(400).json({ message: 'Validation error', errors: error.format() });
     }

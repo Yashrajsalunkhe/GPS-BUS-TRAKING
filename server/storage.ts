@@ -39,6 +39,7 @@ import {
   type InsertHoliday,
 } from "@shared/schema";
 import { StudentWithUser, BusWithRoute, RouteWithStops, BusLocationWithInfo, AdminDashboardStats, RecentActivity } from "@shared/interfaces";
+import bcrypt from 'bcrypt';
 
 export interface IStorage {
   // User Management
