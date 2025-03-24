@@ -17,13 +17,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { loginSchema, LoginInput } from "@shared/schema";
 import { login } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
-import { LockIcon } from "lucide-react";
+import { LockIcon, InfoIcon } from "lucide-react";
 
 export default function LoginForm() {
   const [, navigate] = useLocation();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [userType, setUserType] = useState<"student" | "admin">("student");
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -60,10 +59,6 @@ export default function LoginForm() {
     }
   };
 
-  const handleUserTypeChange = (type: "student" | "admin") => {
-    setUserType(type);
-  };
-
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardContent className="pt-6">
@@ -76,31 +71,22 @@ export default function LoginForm() {
           </p>
         </div>
 
+        {/* Admin login tip */}
+        <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <InfoIcon className="h-5 w-5 text-blue-500" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-blue-700">
+                <strong>Admin users:</strong> Use <strong>admin</strong> (username) and <strong>password123</strong> (password) to login as administrator.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div className="flex mb-4 w-full rounded-md overflow-hidden">
-              <Button
-                type="button"
-                variant={userType === "student" ? "default" : "outline"}
-                className={`w-full rounded-r-none ${
-                  userType === "student" ? "bg-primary text-white" : ""
-                }`}
-                onClick={() => handleUserTypeChange("student")}
-              >
-                Student
-              </Button>
-              <Button
-                type="button"
-                variant={userType === "admin" ? "default" : "outline"}
-                className={`w-full rounded-l-none ${
-                  userType === "admin" ? "bg-primary text-white" : ""
-                }`}
-                onClick={() => handleUserTypeChange("admin")}
-              >
-                Admin
-              </Button>
-            </div>
-
             <FormField
               control={form.control}
               name="username"
