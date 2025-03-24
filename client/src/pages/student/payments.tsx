@@ -2,7 +2,7 @@ import StudentLayout from "@/components/layout/StudentLayout";
 import PaymentHistory from "@/components/student/PaymentHistory";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useNavigate } from "wouter";
+import { useRouter } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Subscription } from "@shared/schema";
 
