@@ -247,5 +247,18 @@ export const registerStudentSchema = insertUserSchema.merge(
   path: ["confirmPassword"],
 });
 
+export const registerAdminSchema = insertUserSchema.extend({
+  confirmPassword: z.string(),
+  name: z.string().min(3, "Name must be at least 3 characters"),
+  position: z.string().min(2, "Position must be at least 2 characters"),
+  department: z.string().min(2, "Department must be at least 2 characters"),
+  mobile: z.string().min(10, "Mobile number must be at least 10 characters"),
+  adminSecret: z.string().min(1, "Admin verification code is required"),
+}).refine(data => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterStudentInput = z.infer<typeof registerStudentSchema>;
+export type RegisterAdminInput = z.infer<typeof registerAdminSchema>;
